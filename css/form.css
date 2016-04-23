@@ -1,0 +1,11 @@
+form {
+    max-width: 600px;
+}
+.centered-form {
+    margin: 0 auto;
+}
+
+/* contains a label and form input */
+.form-field {
+    margin: 25px;
+}

@@ -1,0 +1,9 @@
+/* gives padding for the fixed top nav, recommended in bootstrap docs when using a navbar fixed to the top. */
+body { padding-top: 70px; }
+
+/* bootstrap nav wants to stack items too early */
+@media (min-width: 300px) {
+    .nav > li {
+        display: inline-block;
+    }
+}

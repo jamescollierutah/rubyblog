@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="author" content="Tigran Mnatsakanyan">
+        <meta name="description" content="Describes my database schema.">
+        <title>Database Schema</title>
+        <link rel="stylesheet" type="text/css" href="/css/base.css">
+        <link rel="stylesheet" type="text/css" href="/css/nav.css">
+    </head>
+    <body>
+        <!-- html5 header element -->
+        <header><!-- currently just serves as a background image via base.css --> </header>
+        <nav>
+            <a href="/">VM Home</a>
+            <a href="/Projects">Projects</a>
+            <a href="/Class_Examples">Class Examples</a>
+            <a href="README.html">README</a>
+            <a href="index.html">Project Home</a>
+            <a href="schema.html">Database Schema</a>
+        </nav>
+        <!-- another nav for this project's pages -->
+        <!-- making nav links for project specific files relative -->
+        <!-- this content is printed out from Controller/something/file so paths
+             are relative from there. -->
+        <nav class="hover-nav">
+            <div class="nav-dropdown">
+                Advisor Pages
+                <a href="Advisor/choose_advisor.php">Advisor Student List</a>
+            </div>
+            <!-- border span, see .nav-dropdown span in base.css -->
+            <span></span>
+            <div class="nav-dropdown">
+                Faculty/Admin Pages
+                <a href="Admin/create_user.php">Create a User</a>
+                <a href="Admin/create_form_choose_student.php">Create a Form for a Student</a>
+                <a href="Admin/edit_form_choose_student.php">Edit a Form for a Student</a>
+                <a href="DGS/overview.php">DGS Overview</a>
+            </div>
+            <span></span>
+            <div class="nav-dropdown">
+                Student Pages
+                <a href="Admin/choose_student_view_forms.php">Student Forms</a>
+            </div>
+        </nav>
+        <h2>Database Schema</h2>
+        <h3>Summary:</h3>
+        <p>
+            I changed my schema quite a bit for v4, enough that I had to erase all of the dummy
+            data I had. I'll have to fill it in again as time goes on. I based my new structure
+            on the power of the natural join. As you can see, a student's id is referred to as
+            userId in all relevant tables, so that joining is easy.
+
+            I now have an activityHistory, to keep track of advisor changes, same with committee History (comHistory).
+            I implemented the activity table I mentioned in earlier versions, I like how much it's shortened the
+            progressForm table, it can also help move away from having to keep track of multiple forms. Instead, a
+            student can just add activities, and I can keep a history of that.
+
+            I also eliminated some redundant properties that can be deduced by looking at other values, such as
+            form completed, and in compliance.
+            <img src="/assets/images/v4_schema.png">
+
+        </p>
+        <h3>Database Schema Creation</h3>
+        <p>
+            I once again used workbench reverse and forward engineering to model and
+        create the new schema.
+            <pre>
+                -- MySQL Workbench Forward Engineering
+
+                SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+                SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+                SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+                -- -----------------------------------------------------
+                -- Schema mydb
+                -- -----------------------------------------------------
+                -- -----------------------------------------------------
+                -- Schema Grad_Prog_V4
+                -- -----------------------------------------------------
+
+                -- -----------------------------------------------------
+                -- Schema Grad_Prog_V4
+                -- -----------------------------------------------------
+                CREATE SCHEMA IF NOT EXISTS `Grad_Prog_V4` DEFAULT CHARACTER SET latin1 ;
+                USE `Grad_Prog_V4` ;
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`activity`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`activity` (
+                  `activityId` INT(11) NOT NULL,
+                  `activityName` VARCHAR(100) NOT NULL COMMENT 'Gives a way for faculty to make new activities in the future.\n',
+                  `goodProgress` INT(11) NOT NULL,
+                  `acceptableProgress` INT(11) NOT NULL,
+                  PRIMARY KEY (`activityId`))
+                ENGINE = InnoDB
+                DEFAULT CHARACTER SET = latin1;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`user`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`user` (
+                  `userId` INT(11) NOT NULL AUTO_INCREMENT,
+                  `firstName` VARCHAR(45) NULL DEFAULT NULL,
+                  `lastName` VARCHAR(45) NULL DEFAULT NULL,
+                  PRIMARY KEY (`userId`))
+                ENGINE = InnoDB
+                AUTO_INCREMENT = 65
+                DEFAULT CHARACTER SET = latin1;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`student`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`student` (
+                  `userId` INT(11) NOT NULL,
+                  `uid` VARCHAR(45) NULL DEFAULT NULL,
+                  `degree` VARCHAR(45) NULL DEFAULT NULL,
+                  `track` VARCHAR(45) NULL DEFAULT NULL,
+                  `semAdmit` VARCHAR(45) NULL DEFAULT NULL,
+                  `dateLastUpdated` DATE NULL DEFAULT NULL,
+                  PRIMARY KEY (`userId`),
+                  INDEX `fk_student_user1_idx` (`userId` ASC),
+                  CONSTRAINT `fk_student_user1`
+                    FOREIGN KEY (`userId`)
+                    REFERENCES `Grad_Prog_V4`.`user` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION)
+                ENGINE = InnoDB
+                DEFAULT CHARACTER SET = utf8;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`advisorHistory`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`advisorHistory` (
+                  `advisorId` INT(11) NOT NULL,
+                  `userId` INT(11) NOT NULL,
+                  `startDate` DATE NOT NULL,
+                  `endDate` DATE NULL DEFAULT NULL,
+                  PRIMARY KEY (`advisorId`, `userId`, `startDate`),
+                  INDEX `studentid for advisorHistory_idx` (`userId` ASC),
+                  CONSTRAINT `advisorid for advisorHistory`
+                    FOREIGN KEY (`advisorId`)
+                    REFERENCES `Grad_Prog_V4`.`user` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION,
+                  CONSTRAINT `studentid for advisorHistory`
+                    FOREIGN KEY (`userId`)
+                    REFERENCES `Grad_Prog_V4`.`student` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION)
+                ENGINE = InnoDB
+                DEFAULT CHARACTER SET = latin1;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`comHistory`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`comHistory` (
+                  `comId` INT(11) NOT NULL,
+                  `userId` INT(11) NOT NULL,
+                  `startDate` DATE NOT NULL,
+                  `endDate` DATE NULL DEFAULT NULL,
+                  PRIMARY KEY (`comId`, `userId`, `startDate`),
+                  INDEX `studentId for comHistory_idx` (`userId` ASC),
+                  CONSTRAINT `comId for comHistory`
+                    FOREIGN KEY (`comId`)
+                    REFERENCES `Grad_Prog_V4`.`user` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION,
+                  CONSTRAINT `studentId for comHistory`
+                    FOREIGN KEY (`userId`)
+                    REFERENCES `Grad_Prog_V4`.`student` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION)
+                ENGINE = InnoDB
+                DEFAULT CHARACTER SET = latin1;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`feedback`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`feedback` (
+                  `userId` INT(11) NOT NULL,
+                  `facultyId` INT(11) NOT NULL,
+                  `feedbackDate` DATE NULL DEFAULT NULL,
+                  `feedbackText` TEXT NULL DEFAULT NULL,
+                  PRIMARY KEY (`userId`, `facultyId`),
+                  INDEX `fk_feedback_user1_idx` (`facultyId` ASC),
+                  CONSTRAINT `fk_feedback_student1`
+                    FOREIGN KEY (`userId`)
+                    REFERENCES `Grad_Prog_V4`.`student` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION,
+                  CONSTRAINT `fk_feedback_user1`
+                    FOREIGN KEY (`facultyId`)
+                    REFERENCES `Grad_Prog_V4`.`user` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION)
+                ENGINE = InnoDB
+                DEFAULT CHARACTER SET = utf8;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`progressForm`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`progressForm` (
+                  `formId` INT(11) NOT NULL AUTO_INCREMENT,
+                  `userId` INT(11) NOT NULL,
+                  `dateCreated` DATE NULL DEFAULT NULL,
+                  `dateLastUpdated` DATE NULL DEFAULT NULL,
+                  `studentSignature` VARCHAR(45) NULL DEFAULT NULL,
+                  `studentSignedDate` DATE NULL DEFAULT NULL,
+                  `advisorSignature` VARCHAR(45) NULL DEFAULT NULL,
+                  `advisorSignedDate` DATE NULL DEFAULT NULL,
+                  PRIMARY KEY (`formId`),
+                  INDEX `fk_progressForm_student1_idx` (`userId` ASC),
+                  CONSTRAINT `fk_progressForm_student1`
+                    FOREIGN KEY (`userId`)
+                    REFERENCES `Grad_Prog_V4`.`student` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION)
+                ENGINE = InnoDB
+                AUTO_INCREMENT = 28
+                DEFAULT CHARACTER SET = utf8;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`formActivities`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`formActivities` (
+                  `formId` INT(11) NOT NULL,
+                  `activityId` INT(11) NOT NULL,
+                  `semsTaken` INT(11) NULL DEFAULT NULL,
+                  PRIMARY KEY (`formId`, `activityId`),
+                  INDEX `activity id for form activities_idx` (`activityId` ASC),
+                  CONSTRAINT `form id for form activities`
+                    FOREIGN KEY (`formId`)
+                    REFERENCES `Grad_Prog_V4`.`progressForm` (`formId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION,
+                  CONSTRAINT `activity id for form activities`
+                    FOREIGN KEY (`activityId`)
+                    REFERENCES `Grad_Prog_V4`.`activity` (`activityId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION)
+                ENGINE = InnoDB
+                DEFAULT CHARACTER SET = latin1;
+
+
+                -- -----------------------------------------------------
+                -- Table `Grad_Prog_V4`.`userRoles`
+                -- -----------------------------------------------------
+                CREATE TABLE IF NOT EXISTS `Grad_Prog_V4`.`userRoles` (
+                  `userId` INT(11) NOT NULL,
+                  `role` VARCHAR(45) NOT NULL,
+                  PRIMARY KEY (`userId`, `role`),
+                  CONSTRAINT `userid for user roles`
+                    FOREIGN KEY (`userId`)
+                    REFERENCES `Grad_Prog_V4`.`user` (`userId`)
+                    ON DELETE NO ACTION
+                    ON UPDATE NO ACTION)
+                ENGINE = InnoDB
+                DEFAULT CHARACTER SET = latin1;
+
+
+                SET SQL_MODE=@OLD_SQL_MODE;
+                SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+                SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+            </pre>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+
+# Pretty much keeps access of View and Model forbidden, looks
+# for everything in Controller/url_from_grad_progress, if the url doesn't have Controller
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !Controller
+RewriteCond %{REQUEST_URI} !css
+RewriteRule ^(.*)$ Controller/$1 [QSA]
+
+DirectoryIndex Controller/User/home.php User/home.php index.php index.html site-down.php
+
+# Since home is the project's directory index, we need to adjust urls within the user controller
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !User
+RewriteRule login.php Controller/User/login.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule register.php Controller/Student/register.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule complete_student_profile.php Controller/Student/complete_student_profile.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule student_status.php Controller/Student/student_status.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule advisor_chosen.php Controller/Student/advisor_chosen.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule add_to_committee.php Controller/Student/add_to_committee.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule edit_progress_form.php Controller/Student/edit_progress_form.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule add_activity_to_form.php Controller/Student/add_activity_to_form.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule update_activity.php Controller/Student/update_activity.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule sign.php Controller/Student/sign.php [QSA]
+RewriteCond %{REQUEST_URI} !User
+RewriteRule logout.php Controller/User/logout.php [QSA]
+RewriteCond %{REQUEST_URI} !Student
+RewriteRule update_profile.php Controller/Student/update_profile.php [QSA]
+RewriteCond %{REQUEST_URI} !Advisor
+RewriteRule students.php Controller/Advisor/students.php [QSA]
+RewriteCond %{REQUEST_URI} !Advisor
+RewriteRule advisor_approve.php Controller/Advisor/advisor_approve.php [QSA]
+RewriteCond %{REQUEST_URI} !DGS
+RewriteRule overview.php Controller/DGS/overview.php [QSA]
+RewriteCond %{REQUEST_URI} !User
+RewriteRule home.php Controller/User/home.php [QSA,L]

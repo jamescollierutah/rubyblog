@@ -1,0 +1,46 @@
+.hover-nav {
+    width: 100%;
+    position: fixed;
+    color: #ffffff;
+    background-color: rgb(60, 60, 60);
+    top: 0;
+    margin: 0;
+    left: 0;
+}
+.nav-element-container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+.nav-element {
+    width: auto;
+    display: inline-block;
+    float: left;
+    padding: 10px 10px;
+    height: auto;
+    background-color: rgb(60, 60, 60);
+    border-right: 1px solid rgb(90,90,90);
+}
+.nav-element:first-child {
+    border-left: 1px solid rgb(90, 90, 90);
+}
+.nav-element:hover {
+    background-color: rgb(110, 110, 120);
+    box-shadow: inset 0 -1px 8px 2px rgb(60, 60, 60);
+}
+.nav-element a {
+    color: #ffffff;
+    padding: 10px 10px;
+}
+/* hide links by default in hover nav */
+.nav-dropdown a {
+    display: none;
+}
+/* show the links in the nav when the nav is being hovered */
+.nav-dropdown:hover a {
+    display: block;
+}
+/* and on hover make the dropdowns appear rounded at the bottom */
+.nav-dropdown:hover {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

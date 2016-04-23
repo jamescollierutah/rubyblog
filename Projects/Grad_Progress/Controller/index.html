@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="author" content="Tigran Mnatsakanyan">
+        <meta name="description" content="Serves as a landing page for the graduate student due progress assignment.">
+        <title>Graduate Student Due Progress</title>
+        <link rel="stylesheet" type="text/css" href="/css/base.css">
+        <link rel="stylesheet" type="text/css" href="/css/nav.css">
+    </head>
+    <body>
+        <!-- html5 header element -->
+        <header><!-- currently just serves as a background image via base.css --> </header>
+        <nav>
+            <a href="/">VM Home</a>
+            <a href="/Projects">Projects</a>
+            <a href="/Class_Examples">Class Examples</a>
+            <a href="README.html">README</a>
+            <a href="index.html">Project Home</a>
+            <a href="schema.html">Database Schema</a>
+        </nav>
+        <!-- another nav for this project's pages -->
+        <!-- making nav links for project specific files relative -->
+        <!-- this content is printed out from Controller/something/file so paths
+             are relative from there. -->
+        <nav class="hover-nav">
+            <div class="nav-dropdown">
+                Advisor Pages
+                <a href="Advisor/choose_advisor.php">Advisor Student List</a>
+            </div>
+            <!-- border span, see .nav-dropdown span in base.css -->
+            <span></span>
+            <div class="nav-dropdown">
+                Faculty/Admin Pages
+                <a href="Admin/create_user.php">Create a User</a>
+                <a href="Admin/create_form_choose_student.php">Create a Form for a Student</a>
+                <a href="Admin/edit_form_choose_student.php">Edit a Form for a Student</a>
+                <a href="DGS/overview.php">DGS Overview</a>
+            </div>
+            <span></span>
+            <div class="nav-dropdown">
+                Student Pages
+                <a href="Admin/choose_student_view_forms.php">Student Forms</a>
+            </div>
+        </nav>
+        <h2>Assignment Four - Grad Progress - Form Input and Validation</h2>
+        <p>
+            With v4, you can create and edit stuff, check out the README or schema.html for more info.
+        </p>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+/* this keeps the td elements from being abnormally wide from the input being inside,
+ * just tried things in chrome developer tools until this worked. Selector means every input within a table. */
+table input {
+    display: table;
+}
+/* http://www.w3schools.com/cssref/sel_nth-child.asp had to google this one, makes it so I can say, when this many
+ * inputs exist within a td, give it these styles, mainly used for that committee stack of fields */
+td input:nth-child(2),input:nth-child(3),input:nth-child(4) {
+    margin-top: 5px;
+}
+/* has a nice stacking affect when the scree shrinks and keeps elements naturally closer together, which let's
+ * me create however much padding I want. Only apples to tds within tables with class paper-like-table. */
+.paper-like-table td {
+    display: inline-block;
+    padding: 14px 7px; /* 14px vertical, 7px horizontal. */
+}
+/* how many semesters it takes was getting cut off */
+.old-school-table td {
+    min-width: 125px;
+    padding: 5px 10px;
+}
+.old-school-table td:nth-child(2), .old-school-table td:nth-child(3) {
+    text-align: center;
+}
+.signature-table td:nth-child(1) {
+    width: 75%;
+}
+.signature-table td:nth-child(2) {
+    width: 25%;
+}
+.signature-table td {
+    padding: 10px 0;
+}
+.signature-table label {
+    padding: 0 10px;
+}
+.signature-table input {
+    width: 95%;
+}
+/* A class to indent a row, used when the row above was a label for this row,
+ * by using a percentage it uses less space on smaller screens. */
+.indented-row {
+    width: 97%;
+    float: right;
+}

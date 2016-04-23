@@ -1,0 +1,158 @@
+/*
+ * author: tigran mnatsakanyan
+ * base.css
+ * contains the most general styles
+ */
+
+/* These are the most general styles that I want to cascade down
+ * to everything within the body, if I want anything inside to look
+ * different I will use more specific selectors.
+ *
+ * I'm treating the body as a centered container, with a background color,
+ * centering of contents, centering itself via margin, and a generic family
+ * font which browsers can easily pick up. Due to the font being naturally smaller
+ * I raised the font size a bit.*/
+body {
+    background-color: #dcdcdc;
+    max-width: 960px;
+    background-position: center;
+    margin: 75px auto;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 17px;
+}
+/* A picture in the background of the header to spruce things up,
+ * the height is set to match the height of the picture, and
+ * centering it's position keeps it centered as the browser window
+ * shrinks horizontally.
+ */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: url('/assets/images/band-background.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100%;
+    opacity: 0.03;
+    filter:alpha(opacity=03);
+}
+/* a generic nav, centered, and centers contents within. A little
+ * vertical margin to give it some breathing room. */
+nav {
+    margin: 15px auto;
+    text-align: center;
+}
+/* give pre a more code-like theme */
+pre {
+    background-color: #000000;
+    color: green;
+    padding: 50px 0;
+    margin: 25px 0;
+}
+/* give imgs in body some padding */
+body img {
+    padding: 25px;
+}
+
+
+h1 {
+    text-align: center;
+}
+/* a little horizontal space between nav links */
+nav a {
+    padding: 0 5px;
+}
+/* these tables take up a lot of room, but let's at least give them some horizontal padding */
+table.signature-table{
+    padding: 0 10px;
+}
+/* give some horizontal padding to titles */
+h3,h4,h5,h6 {
+    padding: 0 15px;
+}
+h1 {
+    text-align: center;
+}
+p {
+    padding: 0 25px;
+}
+a {
+    padding: 0 25px;
+}
+
+/* if a p's in a table or list don't add horizontal padding */
+table p, ul p, ol p {
+    padding: 0;
+}
+ol, ul {
+    padding: 0 40px;
+}
+
+/* a class to apply to the body when I need inline elements centered */
+.center-inline {
+    text-align: center;
+}
+/* inline block is the best, it's like having bootstrap with one css property. */
+.info-container {
+    display: inline-block;
+    border: 1px solid black;
+    background: #fff8dc;
+    padding-bottom: 15px;
+    margin: 15px;
+    width: 280px;
+}
+.info-container ul {
+    list-style-type: none;
+    margin-bottom: 0;
+}
+/* some inputs require more width than the default space, let's make a class for that */
+.long-input {
+    min-width: 175px;
+}
+
+.container {
+    display: block;
+    float: left;
+    border: 1px solid black;
+    background: #fff8dc;
+    padding: 15px;
+    margin: 10px;
+    width: 44%;
+    min-height: 180px;
+}
+
+.student-info-container {
+
+}
+
+.student-info {
+    padding: 10px 0;
+}
+
+.form-activities-container {
+    max-width: 50%;
+}
+
+.form-activity {
+    padding: 10px 0;
+}
+
+.add-activity-container {
+
+}
+
+.signature:first-child {
+    padding-bottom: 10px;
+}
+
+.signButton{
+    padding-bottom: 10px;
+}
+
+.label, label {
+    font-weight: bold;
+}
+
